@@ -13,15 +13,21 @@ const Statistics = ({ countGood, countNeutral, countBad }) => {
   return (
     <div>
       <h2>statistics</h2>
-      <p>good: {countGood}</p>
-      <p>neutral: {countNeutral}</p>
-      <p>bad: {countBad}</p>
-      <p>total: {total}</p>
-      <p>average: {average}</p>
-      <p>positive: {positivePercentage.toFixed(1)}%</p>
+      <StatisticLine text="good" value={countGood} />
+      <StatisticLine text="neutral" value={countNeutral} />
+      <StatisticLine text="bad" value={countBad} />
+      <StatisticLine text="all" value={total} />
+      <StatisticLine text="average" value={average} />
+      <StatisticLine text="positive" value={`${positivePercentage.toFixed(1)}%`} />
     </div>
   )
 }
+
+const StatisticLine = ({ text, value }) => (
+  <p>
+    {text}: {value}
+  </p>
+)
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
@@ -34,10 +40,10 @@ function App() {
     <div>
       <h1>give feedback</h1>
       <div className="counter">
-        <Button onClick={() => setCountGood(countGood + 1)} text="good" />
-        <Button onClick={() => setCountNeutral(countNeutral + 1)} text="neutral" />
-        <Button onClick={() => setCountBad(countBad + 1)} text="bad" />
-        <Statistics countGood={countGood} countNeutral={countNeutral} countBad={countBad} />  
+        <Button text="good" onClick={() => setCountGood(countGood + 1)} />
+        <Button text="neutral" onClick={() => setCountNeutral(countNeutral + 1)} />
+        <Button text="bad" onClick={() => setCountBad(countBad + 1)} />
+        <Statistics countGood={countGood} countNeutral={countNeutral} countBad={countBad} />
       </div>
     </div>
   )
