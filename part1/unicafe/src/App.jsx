@@ -16,6 +16,35 @@ const DisplayBad = ({ counter }) =>
   <p>bad: {counter}</p>
 </div>
 
+const DisplayTotal = ({ countGood, countNeutral, countBad }) => {
+  const total = countGood + countNeutral + countBad
+  return (
+    <div>
+      <p>total: {total}</p>
+    </div>
+  )
+}
+
+const DisplayAverage = ({ countGood, countNeutral, countBad }) => {
+  const total = countGood + countNeutral + countBad
+  const average = total === 0 ? 0 : (countGood - countBad) / total
+  return (
+    <div>
+      <p>average: {average}</p>
+    </div>
+  )
+}
+
+const DisplayPositive = ({ countGood, countNeutral, countBad }) => {
+  const total = countGood + countNeutral + countBad
+  const positivePercentage = total === 0 ? 0 : (countGood / total) * 100
+  return (
+    <div>
+      <p>positive: {positivePercentage.toFixed(1)}%</p>
+    </div>
+  )
+}
+
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
 function App() {
@@ -33,6 +62,9 @@ function App() {
         <DisplayGood counter={countGood} />
         <DisplayNeutral counter={countNeutral} />
         <DisplayBad counter={countBad} />
+        <DisplayTotal countGood={countGood} countNeutral={countNeutral} countBad={countBad} />
+        <DisplayAverage countGood={countGood} countNeutral={countNeutral} countBad={countBad} />
+        <DisplayPositive countGood={countGood} countNeutral={countNeutral} countBad={countBad} />
       </div>
     </div>
   )
