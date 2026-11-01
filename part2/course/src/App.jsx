@@ -1,29 +1,17 @@
 import './App.css'
 
-let animals = [
-  {
-    name: 'Dog',
-    size: 'medium'
-  },
-  {
-    name: 'Cat',
-    size: 'small'
-  },
-  {
-    name: 'Elephant',
-    size: 'large'
-  }, 
-  {
-    name: 'Dog',
-    size: 'small'
-  }
+let orders = [
+  { amount: 250 },
+  { amount: 150 },
+  { amount: 50 },
 ]
 
-let names = animals.map(x => x.name)
+
+let total = orders.reduce((sum, order) => sum + order.amount, 0)
 
 function App() {
   return (
-    console.log(names)
+    console.log(total)
   )
 }
 
