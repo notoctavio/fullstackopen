@@ -1,6 +1,6 @@
 import './App.css'
 
-const animals = [
+let animals = [
   {
     name: 'Dog',
     size: 'medium'
@@ -12,20 +12,18 @@ const animals = [
   {
     name: 'Elephant',
     size: 'large'
+  }, 
+  {
+    name: 'Dog',
+    size: 'small'
   }
 ]
 
-let isDog = function(animal) {
-  return animal.name === 'Dog'
-}
-
-let dogs = animals.filter(isDog)
+let names = animals.map(x => x.name)
 
 function App() {
-
-  console.log('Hello world!')
   return (
-    console.log(dogs)
+    console.log(names)
   )
 }
 
