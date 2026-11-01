@@ -1,17 +1,15 @@
 import './App.css'
 
-let orders = [
-  { amount: 250 },
-  { amount: 150 },
-  { amount: 50 },
-]
+function App (props) {
+  const { notes } = props
 
-
-let total = orders.reduce((sum, order) => sum + order.amount, 0)
-
-function App() {
   return (
-    console.log(total)
+    <div>
+      <h1>Notes</h1>
+      <ul>
+        {notes.map(note => <li key={note.id}>{note.content}</li>)}
+      </ul>
+    </div>
   )
 }
 
