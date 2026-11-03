@@ -1,28 +1,5 @@
 import './App.css'
-
-const Course = (props) => {
-  return (
-    <div>
-      <h1>{props.course.name}</h1>
-    </div>
-  )
-}
-
-const Content = (props) => {
-  return (
-    <div>
-      {props.course.parts.map(part => <p> {part.name} {part.exercises} </p>)}
-    </div>
-  )
-}
-
-const Total = (props => {
-  return (
-    <div>
-      <h4> Total of {props.course.parts.reduce((total, part) => total + part.exercises, 0)} exercises </h4>
-    </div>
-  )
-})
+import Course from './Course'
 
 const App = () => {
   const courses = [
@@ -72,12 +49,7 @@ const App = () => {
 
   return (
     <div>
-      <Course course={courses[0]} />
-      <Content course={courses[0]} />
-      <Total course={courses[0]} />
-      <Course course={courses[1]} />
-      <Content course={courses[1]} />
-      <Total course={courses[1]} />
+      <Course courses={courses} />
     </div>
   )
 }
