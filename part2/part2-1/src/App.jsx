@@ -35,7 +35,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter />
+      <Filter/>
       <h3>Add a new contact</h3>
       <PersonForm 
         newName={newName}
