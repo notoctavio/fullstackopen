@@ -1,12 +1,4 @@
-import App from './App.jsx'
-import axios from 'axios'
-import { createRoot } from 'react-dom/client'
+import ReactDOM from "react-dom/client";
+import App from "./App";
 
-const promise = axios
-    .get('http://localhost:3001/notes')
-    .then(response => {
-        const notes = response.data
-        console.log(notes)
-    })
-
-createRoot(document.getElementById('root')).render(<App />)
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
