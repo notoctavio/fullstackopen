@@ -28,11 +28,6 @@ const App = () => {
 
   const addNote = event => {
     event.preventDefault()
-
-    if (!newNote.trim() || isLoading || isSaving) {
-      return
-    }
-
     const noteObject = {
       content: newNote.trim(),
       important: Math.random() < 0.5,
@@ -42,17 +37,9 @@ const App = () => {
     setErrorMessage('')
 
     axios
-      .post(notesUrl, noteObject)
+      .post('http://localhost:3003/notes', noteObject)
       .then(response => {
         console.log(response)
-        setNotes(currentNotes => currentNotes.concat(response.data))
-        setNewNote('')
-      })
-      .catch(() => {
-        setErrorMessage('Could not save the note. Please try again.')
-      })
-      .finally(() => {
-        setIsSaving(false)
       })
   }
 
