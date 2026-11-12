@@ -29,6 +29,16 @@
       "content": "helo again",
       "important": false,
       "id": "pa6XWVfkgq8"
+    },
+    {
+      "content": "yey",
+      "important": true,
+      "id": "yYrpYforFg8"
+    },
+    {
+      "content": "d",
+      "important": false,
+      "id": "g1ZBSkt_HvI"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
