@@ -2,17 +2,17 @@ import { useState, useEffect } from 'react'
 import personService from './services/persons'
 import Person from './components/Person'
 import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [filter, setFilter] = useState('')
+  const [isSaving, setIsSaving] = useState(false)
 
-  // Function to handle filter input change
   const handleFilterChange = event => {
     setFilter(event.target.value)
   }
 
-  // Filter persons based on the filter state
   const filteredPersons = persons.filter(person =>
     person.name.toLowerCase().includes(filter.toLowerCase())
   )
@@ -30,13 +30,14 @@ const App = () => {
       })
   }, [])
 
+  // Function to delete a person
   const deletePerson = id => {
     const personToDelete = persons.find(p => p.id === id)
     if (window.confirm(`Delete ${personToDelete.name}?`)) {
       personService
         .deletePerson(id)
         .then(() => {
-          setPersons(persons.filter(p => p.id !== id))
+          setPersons(currentPersons => currentPersons.filter(p => p.id !== id))
           console.log(`Deleted person with id ${id}`)
           console.log('Updated persons list:', persons.filter(p => p.id !== id))
         })
@@ -46,12 +47,39 @@ const App = () => {
     }
   }
 
+  const addPerson = (newPerson) => {
+    if (isSaving) {
+      return Promise.resolve(null)
+    }
+
+    setIsSaving(true)
+
+    return personService
+      .create(newPerson)
+      .then(returnedPerson => {
+        setPersons(currentPersons => currentPersons.concat(returnedPerson))
+        console.log('Added new person:', returnedPerson)
+        return returnedPerson
+      })
+      .catch(() => {
+        alert('Failed to add the person. Please try again.')
+        return null
+      })
+      .finally(() => {
+        setIsSaving(false)
+      })
+  }
+
   return (
     <div>
       <h1>Phonebook</h1>
 
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
 
+      <h2>Add a new person</h2>
+      <PersonForm addPerson={addPerson} isSaving={isSaving} />
+
+      <h2>Numbers</h2>
       <ul>
         {filteredPersons.map(person => (
           <Person

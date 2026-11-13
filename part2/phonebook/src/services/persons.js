@@ -4,7 +4,7 @@ const baseURL = 'http://localhost:3002/persons'
 const getAll = () => {
     console.log('Fetching all persons...')
     const request = axios.get(baseURL)
-    return request.then(response => response.data, "done")
+    return request.then(response => response.data)
 }
 
 const create = newObject => {
