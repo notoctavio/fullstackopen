@@ -48,6 +48,47 @@ const App = () => {
   }
 
   const addPerson = (newPerson) => {
+    const existingPerson = persons.find(
+      person => person.name === newPerson.name
+    )
+
+    if (existingPerson) {
+      const confirmed = window.confirm(
+        `${existingPerson.name} is already in the phonebook. Replace the old number?`
+      )
+
+      if (!confirmed) {
+        return Promise.resolve(null)
+      }
+
+      const updatedPerson = {
+        ...existingPerson,
+        number: newPerson.number,
+      }
+
+      setIsSaving(true)
+
+      return personService
+        .update(existingPerson.id, updatedPerson)
+        .then(returnedPerson => {
+          setPersons(currentPersons =>
+            currentPersons.map(person =>
+              person.id === existingPerson.id
+                ? returnedPerson
+                : person
+            )
+          )
+
+          return returnedPerson
+        })
+        .catch(() => {
+          alert('Failed to update the number. Please try again.')
+          return null
+        })
+        .finally(() => {
+          setIsSaving(false)
+        })
+    }
     if (isSaving) {
       return Promise.resolve(null)
     }
