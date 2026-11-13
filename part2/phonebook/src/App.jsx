@@ -1,9 +1,21 @@
 import { useState, useEffect } from 'react'
 import personService from './services/persons'
 import Person from './components/Person'
+import Filter from './components/Filter'
 
 const App = () => {
   const [persons, setPersons] = useState([])
+  const [filter, setFilter] = useState('')
+
+  // Function to handle filter input change
+  const handleFilterChange = event => {
+    setFilter(event.target.value)
+  }
+
+  // Filter persons based on the filter state
+  const filteredPersons = persons.filter(person =>
+    person.name.toLowerCase().includes(filter.toLowerCase())
+  )
 
   // Fetch persons from the server when the component mounts
   useEffect(() => {
@@ -38,8 +50,10 @@ const App = () => {
     <div>
       <h1>Phonebook</h1>
 
+      <Filter filter={filter} handleFilterChange={handleFilterChange} />
+
       <ul>
-        {persons.map(person => (
+        {filteredPersons.map(person => (
           <Person
             key={person.id}
             person={person}
