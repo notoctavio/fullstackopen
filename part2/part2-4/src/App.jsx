@@ -62,7 +62,7 @@ const App = () => {
   // Function to toggle the importance of a note
   const toggleImportanceOf = id => {
     const url = `${notesUrl}/${id}`
-    const note = notes.find(n => n.id === id)
+    const note = notes.find(n => n.id === id) 
     const changedNote = { ...note, important: !note.important }
 
     setErrorMessage('')

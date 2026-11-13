@@ -45,6 +45,5 @@
       "important": true,
       "id": "eBDRkYR2wHk"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }
