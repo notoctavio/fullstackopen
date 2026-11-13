@@ -25,6 +25,8 @@ const App = () => {
         .deletePerson(id)
         .then(() => {
           setPersons(persons.filter(p => p.id !== id))
+          console.log(`Deleted person with id ${id}`)
+          console.log('Updated persons list:', persons.filter(p => p.id !== id))
         })
         .catch(() => {
           alert(`Failed to delete ${personToDelete.name}. Please try again.`)
