@@ -28,6 +28,11 @@ const App = () => {
 
   const addNote = event => {
     event.preventDefault()
+
+    if (!newNote.trim() || isLoading || isSaving) {
+      return
+    }
+
     const noteObject = {
       content: newNote.trim(),
       important: Math.random() < 0.5,
@@ -37,23 +42,36 @@ const App = () => {
     setErrorMessage('')
 
     axios
-      .post('http://localhost:3003/notes', noteObject)
+      .post(notesUrl, noteObject)
       .then(response => {
         console.log(response)
-        setNotes(notes.concat(response.data))
+        setNotes(currentNotes => currentNotes.concat(response.data))
         setNewNote('')
+      })
+      .catch(() => {
+        setErrorMessage('Could not save the note. Please try again.')
+      })
+      .finally(() => {
+        setIsSaving(false)
       })
   }
 
   const toggleImportanceOf = id => {
-    const url = 'http://localhost:3003/notes/${id}'
+    const url = `${notesUrl}/${id}`
     const note = notes.find(n => n.id === id)
     const changedNote = { ...note, important: !note.important }
+
+    setErrorMessage('')
 
     axios
       .put(url, changedNote)
       .then(response => {
-        setNotes(notes.map(note => note.id !== id ? note : response.data))
+        setNotes(currentNotes =>
+          currentNotes.map(note => note.id !== id ? note : response.data)
+        )
+      })
+      .catch(() => {
+        setErrorMessage('Could not update the note. Please try again.')
       })
   }
 
@@ -76,10 +94,11 @@ const App = () => {
       </button>
       <ul>
         {notesToShow.map(note => (
-          <Note 
-          key={note.id} 
-          note={note} 
-          toggleImportance={() => toggleImportanceOf(note.id)} />
+          <Note
+            key={note.id}
+            note={note}
+            toggleImportance={() => toggleImportanceOf(note.id)}
+          />
         ))}
       </ul>
       <form onSubmit={addNote}>
