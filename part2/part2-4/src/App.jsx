@@ -12,6 +12,7 @@ const App = () => {
   const [isSaving, setIsSaving] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
+  // Fetch notes from the server when the component mounts
   useEffect(() => {
     axios
       .get(notesUrl)
@@ -26,6 +27,7 @@ const App = () => {
       })
   }, [])
 
+  // Function to add a new note
   const addNote = event => {
     event.preventDefault()
 
@@ -41,6 +43,7 @@ const App = () => {
     setIsSaving(true)
     setErrorMessage('')
 
+    // Save the new note to the server
     axios
       .post(notesUrl, noteObject)
       .then(response => {
@@ -56,6 +59,7 @@ const App = () => {
       })
   }
 
+  // Function to toggle the importance of a note
   const toggleImportanceOf = id => {
     const url = `${notesUrl}/${id}`
     const note = notes.find(n => n.id === id)
@@ -76,11 +80,12 @@ const App = () => {
       })
   }
 
-
+  // Function to handle changes in the new note input field
   const handleNoteChange = event => {
     setNewNote(event.target.value)
   }
 
+  // Determine which notes to show based on the showAll state
   const notesToShow = showAll
     ? notes
     : notes.filter(note => note.important)
