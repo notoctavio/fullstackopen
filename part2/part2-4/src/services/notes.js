@@ -19,5 +19,4 @@ const update = (id, updatedObject) => {
     return request.then(response => response.data)
 }
 
-export default { 
-getAll, create, update }
+export default { getAll, create, update }
