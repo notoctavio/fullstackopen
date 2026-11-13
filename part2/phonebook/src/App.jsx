@@ -1,16 +1,36 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/persons'
+import Person from './components/Person'
 
 const App = () => {
   const [persons, setPersons] = useState([])
 
+  // Fetch persons from the server when the component mounts
   useEffect(() => {
-    axios
-      .get('http://localhost:3002/persons')
-      .then(response => {
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+        console.log('Fetched persons from the server:', initialPersons)
+      })
+      .catch(() => {
+        alert('Could not fetch persons. Please try again.')
       })
   }, [])
+
+  const deletePerson = id => {
+    const personToDelete = persons.find(p => p.id === id)
+    if (window.confirm(`Delete ${personToDelete.name}?`)) {
+      personService
+        .deletePerson(id)
+        .then(() => {
+          setPersons(persons.filter(p => p.id !== id))
+        })
+        .catch(() => {
+          alert(`Failed to delete ${personToDelete.name}. Please try again.`)
+        })
+    }
+  }
 
   return (
     <div>
@@ -18,9 +38,11 @@ const App = () => {
 
       <ul>
         {persons.map(person => (
-          <li key={person.id}>
-            {person.name} {person.number}
-          </li>
+          <Person
+            key={person.id}
+            person={person}
+            deletePerson={() => deletePerson(person.id)}
+          />  
         ))}
       </ul>
     </div>
