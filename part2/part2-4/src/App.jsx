@@ -71,8 +71,9 @@ const App = () => {
           currentNotes.map(note => note.id !== id ? note : returnedNote)
         )
       })
-      .catch(() => {
-        setErrorMessage('Could not update the note. Please try again.')
+      .catch(error => {
+        alert(`The note '${note.content}' was already deleted from the server`)
+        setNotes(currentNotes => currentNotes.filter(n => n.id !== id))
       })
   }
 
