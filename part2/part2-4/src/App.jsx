@@ -63,6 +63,7 @@ const App = () => {
 
     setErrorMessage('')
 
+    //Update the note
     axios
       .put(url, changedNote)
       .then(response => {
