@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
-import axios from 'axios'
 import Note from './components/Note'
-
-const notesUrl = 'http://localhost:3003/notes'
+import noteService from './services/notes'
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -14,15 +12,14 @@ const App = () => {
 
   // Fetch notes from the server when the component mounts
   useEffect(() => {
-    axios
-      .get(notesUrl)
-      .then(response => {
-        setNotes(response.data)
+    noteService
+      .getAll()
+      .then(initialNotes => {
+        setNotes(initialNotes)
+        setIsLoading(false)
       })
       .catch(() => {
-        setErrorMessage('Could not load notes. Check that the server is running on port 3003.')
-      })
-      .finally(() => {
+        setErrorMessage('Could not fetch notes. Please try again.')
         setIsLoading(false)
       })
   }, [])
@@ -44,11 +41,11 @@ const App = () => {
     setErrorMessage('')
 
     // Save the new note to the server
-    axios
-      .post(notesUrl, noteObject)
-      .then(response => {
-        console.log(response)
-        setNotes(currentNotes => currentNotes.concat(response.data))
+    noteService
+      .create(noteObject)
+      .then(returnedNote => {
+        console.log(returnedNote)
+        setNotes(currentNotes => currentNotes.concat(returnedNote))
         setNewNote('')
       })
       .catch(() => {
@@ -61,18 +58,17 @@ const App = () => {
 
   // Function to toggle the importance of a note
   const toggleImportanceOf = id => {
-    const url = `${notesUrl}/${id}`
     const note = notes.find(n => n.id === id) 
     const changedNote = { ...note, important: !note.important }
 
     setErrorMessage('')
 
     //Update the note
-    axios
-      .put(url, changedNote)
-      .then(response => {
+    noteService
+      .update(id, changedNote)
+      .then(returnedNote => {
         setNotes(currentNotes =>
-          currentNotes.map(note => note.id !== id ? note : response.data)
+          currentNotes.map(note => note.id !== id ? note : returnedNote)
         )
       })
       .catch(() => {
