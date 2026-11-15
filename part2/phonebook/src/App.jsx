@@ -3,11 +3,13 @@ import personService from './services/persons'
 import Person from './components/Person'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [filter, setFilter] = useState('')
   const [isSaving, setIsSaving] = useState(false)
+  const [notification, setNotification] = useState(null)
 
   const handleFilterChange = event => {
     setFilter(event.target.value)
@@ -78,6 +80,10 @@ const App = () => {
                 : person
             )
           )
+          setNotification(`Updated ${returnedPerson.name}`)
+          setTimeout(() => {
+            setNotification(null)
+          }, 5000)
 
           return returnedPerson
         })
@@ -100,6 +106,10 @@ const App = () => {
       .then(returnedPerson => {
         setPersons(currentPersons => currentPersons.concat(returnedPerson))
         console.log('Added new person:', returnedPerson)
+        setNotification(`Added ${returnedPerson.name}`)
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
         return returnedPerson
       })
       .catch(() => {
@@ -114,6 +124,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
+      <Notification message={notification} />
 
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
 
