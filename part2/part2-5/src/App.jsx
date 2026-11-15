@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Note from './components/Notes'
 import noteService from './services/notes'
+import Notification from './components/Notification'
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -8,7 +9,7 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState('some error happened...')
 
   // Fetch notes from the server when the component mounts
   useEffect(() => {
@@ -61,8 +62,6 @@ const App = () => {
     const note = notes.find(n => n.id === id) 
     const changedNote = { ...note, important: !note.important }
 
-    setErrorMessage('')
-
     //Update the note
     noteService
       .update(id, changedNote)
@@ -72,8 +71,13 @@ const App = () => {
         )
       })
       .catch(() => {
-        alert(`The note '${note.content}' was already deleted from the server`)
-        setNotes(currentNotes => currentNotes.filter(n => n.id !== id))
+        setErrorMessage(
+          `Note '${note.content} was already deleted from server`
+        )
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+        setNotes(notes.filter(n => n.id !== id))
       })
   }
 
@@ -90,7 +94,7 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
-      {errorMessage && <p role="alert">{errorMessage}</p>}
+      <Notification message={errorMessage} />
       {isLoading && <p>Loading notes...</p>}
       <button type="button" onClick={() => setShowAll(!showAll)}>
         show {showAll ? 'important' : 'all'}
