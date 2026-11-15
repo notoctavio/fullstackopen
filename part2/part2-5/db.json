@@ -35,6 +35,5 @@
       "important": false,
       "id": "mHlzg6ClPl0"
     }
-  ],
-  "$schema": "./node_modules/json-server/schema.json"
+  ]
 }
