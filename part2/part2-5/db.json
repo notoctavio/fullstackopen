@@ -1,9 +1,10 @@
 {
-  "persons": [
+  "notes": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": "1"
+      "content": "caca",
+      "important": true,
+      "id": "BTIPpSGEcpc"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
