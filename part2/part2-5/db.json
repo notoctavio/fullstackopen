@@ -4,6 +4,22 @@
       "content": "caca",
       "important": true,
       "id": "BTIPpSGEcpc"
+    },
+    {
+      "content": "dasda",
+      "important": true,
+      "id": "9GQLjPzKxic"
+    },
+    {
+      "content": "afdsfqawe",
+      "important": false,
+      "id": "OucRn3EnhHc"
+    },
+    {
+      "content": "sdfafasf",
+      "important": true,
+      "id": "MUnwksa31Vc"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
