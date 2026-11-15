@@ -10,6 +10,7 @@ const App = () => {
   const [filter, setFilter] = useState('')
   const [isSaving, setIsSaving] = useState(false)
   const [notification, setNotification] = useState(null)
+  const [error, setError] = useState(null)
 
   const handleFilterChange = event => {
     setFilter(event.target.value)
@@ -44,7 +45,13 @@ const App = () => {
           console.log('Updated persons list:', persons.filter(p => p.id !== id))
         })
         .catch(() => {
-          alert(`Failed to delete ${personToDelete.name}. Please try again.`)
+          setError(
+            `Information of ${personToDelete.name} has already been removed from server`
+          )
+          setTimeout(() => {
+            setError(null)
+          }, 5000)
+          setPersons(currentPersons => currentPersons.filter(p => p.id !== id))
         })
     }
   }
@@ -88,7 +95,15 @@ const App = () => {
           return returnedPerson
         })
         .catch(() => {
-          alert('Failed to update the number. Please try again.')
+          setError(
+            `Information of ${existingPerson.name} has already been removed from server`
+          )
+          setTimeout(() => {
+            setError(null)
+          }, 5000)
+          setPersons(currentPersons =>
+            currentPersons.filter(p => p.id !== existingPerson.id)
+          )
           return null
         })
         .finally(() => {
@@ -124,7 +139,7 @@ const App = () => {
   return (
     <div>
       <h1>Phonebook</h1>
-      <Notification message={notification} />
+      <Notification message={notification} error={error} />
 
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
 

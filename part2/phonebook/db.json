@@ -11,19 +11,9 @@
       "id": "4"
     },
     {
-      "name": "mihai",
-      "number": "123",
-      "id": "PoUuiEgSUJo"
-    },
-    {
       "name": "dasdsdaa",
       "number": "123123",
       "id": "-RkxdzldOp4"
-    },
-    {
-      "name": "da",
-      "number": "1233333",
-      "id": "Yc48tpVVxt8"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
