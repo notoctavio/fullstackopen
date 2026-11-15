@@ -29,6 +29,11 @@
       "content": "dasdasd",
       "important": true,
       "id": "ZSGny56jZ4w"
+    },
+    {
+      "content": "das",
+      "important": false,
+      "id": "mHlzg6ClPl0"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
