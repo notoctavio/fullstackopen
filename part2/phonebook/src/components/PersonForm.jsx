@@ -19,6 +19,7 @@ const PersonForm = ({ addPerson, isSaving }) => {
         setNewName('')
         setNewNumber('')
       }
+
     })
   }
 
