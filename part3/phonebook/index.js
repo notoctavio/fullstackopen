@@ -24,23 +24,8 @@ let persons = [
     }
 ]
 
-app.get('/', (request, response) => {
-    response.send('<h1>Hello world</h1>')
-})
-
-app.get('/api/notes', (request, response) => {
-    response.json(notes)
-})
-
-app.get('/api/notes/:id', (request, response) => {
-    const id = request.params.id
-    const note = notes.find(note => note.id === Number(id))
-
-    if (note) {
-        response.json(note)
-    } else {
-        response.status(404).end()
-    }
+app.get('/api/persons', (request, response) => {
+    response.json(persons)
 })
 
 const PORT = 3001
