@@ -1,9 +1,10 @@
 const express = require('express')
 const morgan = require('morgan')
+
 const app = express()
 
 app.use(express.json())
-app.use(morgan('combined'))
+app.use(morgan('tiny'))
 
 let persons = [
     { 
@@ -28,6 +29,10 @@ let persons = [
     }
 ]
 
+app.get('/', (request, response) => {
+    response.send('<h1>Hello world</h1>')
+})
+
 // GET request shows all persons in the phonebook
 app.get('/api/persons', (request, response) => {
     response.json(persons)
@@ -39,6 +44,7 @@ app.get('/info', (request, response) => {
     response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${date}</p>`)
 })
 
+// GET request shows a specific person in the phonebook
 app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id
     const person = persons.find(person => person.id === id)
@@ -50,6 +56,7 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
+// DELETE request removes a specific person from the phonebook
 app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
     persons = persons.filter(person => person.id !== id)
@@ -57,6 +64,7 @@ app.delete('/api/persons/:id', (request, response) => {
     response.status(204).end()
 })
 
+// POST request adds a new person to the phonebook
 app.post('/api/persons', (request, response) => {
     const body = request.body || {}
 
@@ -82,22 +90,6 @@ app.post('/api/persons', (request, response) => {
 
     response.json(person)
 })
-
-const requestLogger = (request, response, next) => {
-    console.log('Method:', request.method)
-    console.log('Path:  ', request.path)
-    console.log('Body:  ', request.body)
-    console.log('---')
-    next()
-}
-
-app.use(requestLogger)
-
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
-
-app.use(unknownEndpoint)
 
 const PORT = 3001
 app.listen(PORT, () => {
