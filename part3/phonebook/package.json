@@ -9,5 +9,8 @@
     "dev": "node --watch index.js"
   },
   "author": "notoctavio",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "morgan": "^1.12.1"
+  }
 }
