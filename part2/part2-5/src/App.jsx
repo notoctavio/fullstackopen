@@ -10,7 +10,7 @@ const App = () => {
   const [showAll, setShowAll] = useState(true)
   const [isLoading, setIsLoading] = useState(true)
   const [isSaving, setIsSaving] = useState(false)
-  const [errorMessage, setErrorMessage] = useState('some error happened...')
+  const [errorMessage, setErrorMessage] = useState('')
 
   // Fetch notes from the server when the component mounts
   useEffect(() => {
