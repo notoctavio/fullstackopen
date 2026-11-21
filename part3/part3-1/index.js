@@ -42,6 +42,26 @@ app.get('/api/notes/:id', (request, response) => {
     }
 })
 
+app.post('/api/notes', (request, response) => {
+    const body = request.body || {}
+
+    if (!body.content) {
+        return response.status(400).json({
+            error: 'content is missing'
+        })
+    }
+
+    const note = {
+        id: (Math.floor(Math.random() * 100000)).toString(),
+        content: body.content,
+        important: Boolean(body.important || false)
+    }
+
+    notes = notes.concat(note)
+
+    response.json(note)
+})
+
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
