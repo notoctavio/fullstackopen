@@ -6,6 +6,7 @@ const app = express()
 
 app.use(cors())
 app.use(express.json())
+app.use(express.static('dist'))
 
 morgan.token('body', (request) => {
     if (request.method === 'POST') {
@@ -41,10 +42,6 @@ let persons = [
       "number": "39-23-6423122"
     }
 ]
-
-app.get('/', (request, response) => {
-    response.send('<h1>Hello world</h1>')
-})
 
 // GET request shows all persons in the phonebook
 app.get('/api/persons', (request, response) => {
