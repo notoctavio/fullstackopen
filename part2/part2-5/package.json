@@ -8,9 +8,7 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "server": "json-server --port 3001 db.json",
-    "build:ui": "rm -rf dist && cd ../../part2/part2-5 && npm run build && cp -r dist ../../part3/part3-1",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+    "server": "json-server --port 3001 db.json"
   },
   "dependencies": {
     "axios": "^1.21.1",
