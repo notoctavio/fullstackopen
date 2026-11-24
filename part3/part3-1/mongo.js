@@ -7,11 +7,9 @@ if (process.argv.length < 3) {
 
 const password = process.argv[2]
 
-const url = `mongodb+srv://vizaruoctavio_db_user:${encodeURIComponent(password)}@cluster0.9y75oto.mongodb.net/`
+const url = `mongodb+srv://vizaruoctavio_db_user:${encodeURIComponent(password)}@cluster0.9y75oto.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0`
 
 mongoose.set('strictQuery',false)
-
-mongoose.connect(url, { family: 4 })
 
 const noteSchema = new mongoose.Schema({
   content: String,
@@ -25,7 +23,13 @@ const note = new Note({
   important: true,
 })
 
-note.save().then(result => {
-  console.log('note saved!')
-  mongoose.connection.close()
-})
+mongoose.connect(url, { family: 4 })
+  .then(() => note.save())
+  .then(() => {
+    console.log('note saved!')
+  })
+  .finally(() => mongoose.connection.close())
+  .catch(error => {
+    console.error('MongoDB error:', error.message)
+    process.exitCode = 1
+  })
