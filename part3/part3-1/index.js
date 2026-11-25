@@ -8,7 +8,7 @@ app.use(express.json())
 app.use(express.static('dist'))
 
 const password = process.argv[2]
-const url = `mongodb+srv://fullstack:${password}@cluster0.9y75oto.mongodb.net/notesApp?retryWrites=true&w=majority&appName=Cluster0`
+const url = `mongodb+srv://fullstack:${password}@cluster0.9y75oto.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0`
 
 mongoose.set('strictQuery', false)
 mongoose.connect(url, {family: 4})
