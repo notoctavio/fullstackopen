@@ -29,8 +29,21 @@ let notes = [
 ]
 
 app.get('/api/notes', (request, response) => {
-    Note.find({}).then(notes => {
-        response.json(notes)
+    const body = request.body
+
+    if (!body.content) {
+        return response.status(400).json({
+            error: 'content is missing'
+        })
+    }
+
+    const note = new Note({
+        content: body.content,
+        important: body.important || false,
+    })
+    
+    note.save().then(savedNote => {
+        response.json(savedNote)
     })
 })
 
