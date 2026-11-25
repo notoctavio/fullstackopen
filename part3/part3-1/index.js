@@ -1,24 +1,11 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const mongoose = require('mongoose')
+const Note = require('./models/note')
 
 app.use(cors())
 app.use(express.json())
 app.use(express.static('dist'))
-
-const password = process.argv[2]
-const url = `mongodb+srv://fullstack:${password}@cluster0.9y75oto.mongodb.net/noteApp?retryWrites=true&w=majority&appName=Cluster0`
-
-mongoose.set('strictQuery', false)
-mongoose.connect(url, {family: 4})
-
-const noteSchema = new mongoose.Schema({
-    content: String,
-    important: Boolean,
-})
-
-const Note = mongoose.model('Note', noteSchema)
 
 let notes = [
     {
