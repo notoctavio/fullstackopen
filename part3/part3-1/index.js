@@ -7,6 +7,19 @@ app.use(cors())
 app.use(express.json())
 app.use(express.static('dist'))
 
+const password = process.argv[2]
+const url = `mongodb+srv://fullstack:${password}@cluster0.9y75oto.mongodb.net/notesApp?retryWrites=true&w=majority&appName=Cluster0`
+
+mongoose.set('strictQuery', false)
+mongoose.connect(url, {family: 4})
+
+const noteSchema = new mongoose.Schema({
+    content: String,
+    important: Boolean,
+})
+
+const Note = mongoose.model('Note', noteSchema)
+
 let notes = [
     {
         id: 1,
@@ -59,6 +72,8 @@ app.post('/api/notes', (request, response) => {
 
     response.json(note)
 })
+
+
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
