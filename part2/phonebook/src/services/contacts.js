@@ -1,28 +1,28 @@
 import axios from 'axios'
-const baseURL = '/api/persons'
+const baseURL = '/api/contacts'
 
 const getAll = () => {
-    console.log('Fetching all persons...')
+    console.log('Fetching all contacts...')
     const request = axios.get(baseURL)
     return request.then(response => response.data)
 }
 
 const create = newObject => {
-    console.log('Creating a new person...')
+    console.log('Creating a new contact...')
     const request = axios.post(baseURL, newObject)
     return request.then(response => response.data)
 }
 
-const deletePerson = id => {
-    console.log(`Deleting person with id ${id}...`)
+const deleteContact = id => {
+    console.log(`Deleting contact with id ${id}...`)
     const request = axios.delete(`${baseURL}/${id}`)
     return request.then(response => response.data)
 }
 
 const update = (id, newObject) => {
-    console.log(`Updating person with id ${id}...`)
+    console.log(`Updating contact with id ${id}...`)
     const request = axios.put(`${baseURL}/${id}`, newObject)
     return request.then(response => response.data)
 }
 
-export default { getAll, create, deletePerson, update }
+export default { getAll, create, deleteContact, update }

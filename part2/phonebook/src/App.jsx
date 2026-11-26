@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
-import personService from './services/persons'
-import Person from './components/Person'
+import contactService from './services/contacts'
+import Contact from './components/Contact'
 import Filter from './components/Filter'
-import PersonForm from './components/PersonForm'
+import ContactForm from './components/ContactForm'
 import Notification from './components/Notification'
 
 const App = () => {
-  const [persons, setPersons] = useState([])
+  const [contacts, setContacts] = useState([])
   const [filter, setFilter] = useState('')
   const [isSaving, setIsSaving] = useState(false)
   const [notification, setNotification] = useState(null)
@@ -16,119 +16,130 @@ const App = () => {
     setFilter(event.target.value)
   }
 
-  const filteredPersons = persons.filter(person =>
-    person.name.toLowerCase().includes(filter.toLowerCase())
+  const filteredContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(filter.toLowerCase())
   )
 
-  // Fetch persons from the server when the component mounts
+  // Fetch contacts from the server when the component mounts
   useEffect(() => {
-    personService
+    contactService
       .getAll()
-      .then(initialPersons => {
-        setPersons(initialPersons)
-        console.log('Fetched persons from the server:', initialPersons)
+      .then(initialContacts => {
+        setContacts(initialContacts)
+        console.log('Fetched contacts from the server:', initialContacts)
       })
       .catch(() => {
-        alert('Could not fetch persons. Please try again.')
+        alert('Could not fetch contacts. Please try again.')
       })
   }, [])
 
-  // Function to delete a person
-  const deletePerson = id => {
-    const personToDelete = persons.find(p => p.id === id)
-    if (window.confirm(`Delete ${personToDelete.name}?`)) {
-      personService
-        .deletePerson(id)
+  // Function to delete a contact
+  const deleteContact = id => {
+    const contactToDelete = contacts.find(contact => contact.id === id)
+    if (window.confirm(`Delete ${contactToDelete.name}?`)) {
+      contactService
+        .deleteContact(id)
         .then(() => {
-          setPersons(currentPersons => currentPersons.filter(p => p.id !== id))
-          console.log(`Deleted person with id ${id}`)
-          console.log('Updated persons list:', persons.filter(p => p.id !== id))
+          setContacts(currentContacts => currentContacts.filter(contact => contact.id !== id))
+          console.log(`Deleted contact with id ${id}`)
         })
-        .catch(() => {
+        .catch(error => {
+          const isMissing = error.response?.status === 404
           setError(
-            `Information of ${personToDelete.name} has already been removed from server`
+            isMissing
+              ? `Information of ${contactToDelete.name} has already been removed from server`
+              : 'Failed to delete the contact. Please try again.'
           )
           setTimeout(() => {
             setError(null)
           }, 5000)
-          setPersons(currentPersons => currentPersons.filter(p => p.id !== id))
+          if (isMissing) {
+            setContacts(currentContacts => currentContacts.filter(contact => contact.id !== id))
+          }
         })
     }
   }
 
-  const addPerson = (newPerson) => {
-    const existingPerson = persons.find(
-      person => person.name === newPerson.name
+  const addContact = (newContact) => {
+    if (isSaving) {
+      return Promise.resolve(null)
+    }
+
+    const existingContact = contacts.find(
+      contact => contact.name === newContact.name
     )
 
-    if (existingPerson) {
+    if (existingContact) {
       const confirmed = window.confirm(
-        `${existingPerson.name} is already in the phonebook. Replace the old number?`
+        `${existingContact.name} is already in the phonebook. Replace the old number?`
       )
 
       if (!confirmed) {
         return Promise.resolve(null)
       }
 
-      const updatedPerson = {
-        ...existingPerson,
-        number: newPerson.number,
+      const updatedContact = {
+        name: existingContact.name,
+        number: newContact.number,
       }
 
       setIsSaving(true)
+      setError(null)
 
-      return personService
-        .update(existingPerson.id, updatedPerson)
-        .then(returnedPerson => {
-          setPersons(currentPersons =>
-            currentPersons.map(person =>
-              person.id === existingPerson.id
-                ? returnedPerson
-                : person
+      return contactService
+        .update(existingContact.id, updatedContact)
+        .then(returnedContact => {
+          setContacts(currentContacts =>
+            currentContacts.map(contact =>
+              contact.id === existingContact.id
+                ? returnedContact
+                : contact
             )
           )
-          setNotification(`Updated ${returnedPerson.name}`)
+          setNotification(`Updated ${returnedContact.name}`)
           setTimeout(() => {
             setNotification(null)
           }, 5000)
 
-          return returnedPerson
+          return returnedContact
         })
-        .catch(() => {
+        .catch(error => {
+          const isMissing = error.response?.status === 404
           setError(
-            `Information of ${existingPerson.name} has already been removed from server`
+            isMissing
+              ? `Information of ${existingContact.name} has already been removed from server`
+              : 'Failed to update the contact. Please try again.'
           )
           setTimeout(() => {
             setError(null)
           }, 5000)
-          setPersons(currentPersons =>
-            currentPersons.filter(p => p.id !== existingPerson.id)
-          )
+          if (isMissing) {
+            setContacts(currentContacts =>
+              currentContacts.filter(contact => contact.id !== existingContact.id)
+            )
+          }
           return null
         })
         .finally(() => {
           setIsSaving(false)
         })
     }
-    if (isSaving) {
-      return Promise.resolve(null)
-    }
-
     setIsSaving(true)
+    setError(null)
 
-    return personService
-      .create(newPerson)
-      .then(returnedPerson => {
-        setPersons(currentPersons => currentPersons.concat(returnedPerson))
-        console.log('Added new person:', returnedPerson)
-        setNotification(`Added ${returnedPerson.name}`)
+    return contactService
+      .create(newContact)
+      .then(returnedContact => {
+        setContacts(currentContacts => currentContacts.concat(returnedContact))
+        console.log('Added new contact:', returnedContact)
+        setNotification(`Added ${returnedContact.name}`)
         setTimeout(() => {
           setNotification(null)
         }, 5000)
-        return returnedPerson
+        return returnedContact
       })
       .catch(() => {
-        alert('Failed to add the person. Please try again.')
+        alert('Failed to add the contact. Please try again.')
         return null
       })
       .finally(() => {
@@ -143,17 +154,17 @@ const App = () => {
 
       <Filter filter={filter} handleFilterChange={handleFilterChange} />
 
-      <h2>Add a new person</h2>
-      <PersonForm addPerson={addPerson} isSaving={isSaving} />
+      <h2>Add a new contact</h2>
+      <ContactForm addContact={addContact} isSaving={isSaving} />
 
       <h2>Numbers</h2>
       <ul>
-        {filteredPersons.map(person => (
-          <Person
-            key={person.id}
-            person={person}
-            deletePerson={() => deletePerson(person.id)}
-          />  
+        {filteredContacts.map(contact => (
+          <Contact
+            key={contact.id}
+            contact={contact}
+            deleteContact={() => deleteContact(contact.id)}
+          />
         ))}
       </ul>
     </div>

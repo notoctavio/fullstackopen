@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const PersonForm = ({ addPerson, isSaving }) => {
+const ContactForm = ({ addContact, isSaving }) => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
 
@@ -14,8 +14,8 @@ const PersonForm = ({ addPerson, isSaving }) => {
       return
     }
 
-    addPerson({ name, number }).then(savedPerson => {
-      if (savedPerson) {
+    addContact({ name, number }).then(savedContact => {
+      if (savedContact) {
         setNewName('')
         setNewNumber('')
       }
@@ -26,9 +26,9 @@ const PersonForm = ({ addPerson, isSaving }) => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label htmlFor="person-name">Name: </label>
+        <label htmlFor="contact-name">Name: </label>
         <input
-          id="person-name"
+          id="contact-name"
           value={newName}
           onChange={event => setNewName(event.target.value)}
           disabled={isSaving}
@@ -36,9 +36,9 @@ const PersonForm = ({ addPerson, isSaving }) => {
         />
       </div>
       <div>
-        <label htmlFor="person-number">Number: </label>
+        <label htmlFor="contact-number">Number: </label>
         <input
-          id="person-number"
+          id="contact-number"
           type="tel"
           value={newNumber}
           onChange={event => setNewNumber(event.target.value)}
@@ -58,4 +58,4 @@ const PersonForm = ({ addPerson, isSaving }) => {
   )
 }
 
-export default PersonForm
+export default ContactForm
