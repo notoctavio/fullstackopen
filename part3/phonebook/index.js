@@ -107,6 +107,7 @@ app.delete('/api/contacts/:id', (request, response, next) => {
     .catch(next)
 })
 
+// Middleware that handles unknown endpoints.
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
